@@ -7,3 +7,5 @@
   "unary",
   "rank",
 )
+
+#let trans(matrix) = $attach(#matrix, tl: upright(t))$

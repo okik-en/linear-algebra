@@ -256,7 +256,7 @@ $ RR^2 = lr(chevron.l vec(3, 2), vec(-1, 4) chevron.r) $
   よって、$|cal(A)| = |cal(B)|$。
 ]
 
-線形空間$W$について、その基底の元数は一位に定まり、これを$W$の*次元*と呼んで,
+線形空間$W$について、その基底の元数は一意に定まり、これを$W$の*次元*と呼んで,
 *$dim W$*と書き表すこととする。とくに${bold(0)}$について、*$dim {bold(0)} = 0$*を約束する。
 
 #definition(name: [次元])[
@@ -315,18 +315,18 @@ $bold(a)$は$cal(A)$の一次結合として書けないことから、$dim V + 
 #definition(name: [座標])[
   零元のみでない線形空間$V$の基底$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)}$について、任意の元$bold(x) in V$が
   $ bold(x) = sum_(i = 0)^(n - 1) lambda_i bold(a)_i $
-  と表せるとき、このような$bold(lambda) = vec(lambda_0, dots, lambda_(n - 1))$を*基底$cal(A)$に関する$bold(x)$の座標*という。
+  と表せるとき、このような$bold(lambda) = vec(lambda_0, dots.v, lambda_(n - 1))$を*基底$cal(A)$に関する$bold(x)$の座標*という。
 ]
 
 線形空間$W$の基底$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)}$に関する座標を考える。
 
-+ $W$の元が異なる座標$bold(lambda) = vec(lambda_0, dots, lambda_(n - 1))$と$bold(mu) = vec(mu_0, dots, mu_(n - 1))$で表せると仮定しよう。このとき
++ $W$の元が異なる座標$bold(lambda) = vec(lambda_0, dots.v, lambda_(n - 1))$と$bold(mu) = vec(mu_0, dots.v, mu_(n - 1))$で表せると仮定しよう。このとき
   $
     (sum_(i = 0)^(n - 1) lambda_i bold(a)_i) - (sum_(i = 0)^(n - 1) mu_i bold(a)_i) = sum_(i = 0)^(n - 1) (lambda_i - mu_i) bold(a)_i = bold(0)
   $
   であり、$cal(A)$は一次独立であるから、すべての$i = 0, dots, n - 1$で$lambda_i = mu_i$となり、仮定に矛盾する。
   よって$W$の任意の元はある座標で一意に表せる。
-+ $W$の元$bold(x)$と$bold(y)$が同じ座標$bold(lambda) = vec(lambda_0, dots, lambda_(n - 1))$で表せるならば、定義より$bold(x) = bold(y)$である。
++ $W$の元$bold(x)$と$bold(y)$が同じ座標$bold(lambda) = vec(lambda_0, dots.v, lambda_(n - 1))$で表せるならば、定義より$bold(x) = bold(y)$である。
 
 これより次が結論付けられる。
 
@@ -434,7 +434,7 @@ $
 
 
 言い換えれば、$RR^n$から$RR^m$への線形写像$f$を再現するには、*基底$cal(A)$に対する線形写像$f$の結果のみを記憶するだけでよい*。
-この列を
+とくに標準基底$cal(E)$について、この列を
 $
   A = mat(f(bold(e)_0), dots.c, f(bold(e)_(n - 1)))
 $
@@ -506,6 +506,12 @@ $ c_(i, j) = sum_(k = 0)^(m - 1) b_(i, k) a_(k, j) $
 を得る。ここで*$C = B A$*と表し、これを*行列$B$と$A$の積*という。
 $ (B A) bold(x) = B (A bold(x)) $
 
+あるいはより直感的な理解を求めるなら---一方でこれがきわめて合理的であることを補足しておくが---我々がいかに行列を定義したかに遡ればよい。定義に従えば、行列$C$は行列$A$を分解した列ベクトル$A = mat(display(bold(a)_0), dots.c, display(bold(a)_(n - 1)))$を用いて、次のように書ける。
+
+$
+  C = mat((g compose f)(bold(e)_0), dots.c, (g compose f)(bold(e)_(n - 1))) = mat(g(bold(a)_0), dots.c, g(bold(a)_(n - 1))) = mat(B bold(a)_0, dots.c, B bold(a)_(n - 1))
+$
+
 一般に、行列の積は*非可換*である（すなわち、$A B = B A$とは限らない）。
 
 #theorem(name: [合成写像と積行列])[
@@ -514,9 +520,13 @@ $ (B A) bold(x) = B (A bold(x)) $
 
 #theorem(name: [行列の積])[
   $l times underline(m)$実行列$B = mat(display(b_(i, j)))_(i, j)$と$underline(m) times n$実行列$A = mat(display(a_(i, j)))_(i, j)$について積$B A$が定まり、
-  $ B A = mat(display(sum_(k = 0)^(m - 1) b_(i, k) a_(k, j)))_(i, j) $
+  $
+    B A = mat(display(sum_(k = 0)^(m - 1) b_(i, k) a_(k, j)))_(i, j) = mat(display(B vec(a_(0, 0), dots.v, a_(0, m - 1))), dots.c, display(B vec(a_(n - 1, 0), dots.v, a_(n - 1, m - 1))))
+  $
   とかける。
 ]
+
+あるいは逆向きに考えることもできる。$n$次元列ベクトルを$n times 1$行列と見做してその責を計算しても、まったく不合理でないのだ。
 
 === 逆行列
 
@@ -575,9 +585,8 @@ $
   $ lambda A = mat(display(lambda a_(i, j)))_(i, j) $
 ]
 
-また、これを用いると先程の$Lambda_m$および$Lambda_n$は
+また、これを用いると先程の$Lambda_m$および$Lambda_n$は次のように書ける。
 $ Lambda_m = lambda I_m, wide Lambda_n = lambda I_n $
-とかける。
 
 === 和
 
@@ -608,3 +617,41 @@ $
   $m times n$実行列$A$、$B$について、*和*$A + B$は次のように書ける。
   $ A + B = mat(display(a_(i, j) + b_(i, j)))_(i, j) $
 ]
+
+ここで、零写像$o: RR^n --> RR^m, f(bold(x)) = bold(0)$を定めるような行列
+$ O_(m times n) = mat(bold(0), dots.c, bold(0)) = mat(0)_(i, j) $
+を*零行列*といって、$O_(m times n)$あるいは単に$O$などと書く。$B = (-1) A$を満たすような行列$B$は$A + B = O$を満たし、単に$B = -A$などと書き表すこととする。
+
+=== 転置
+
+=== 複素共役
+
+== 座標の変換
+
+== 行列の基本変形
+
+#let Row(description) = $cal(R)_(#description)$
+
+$m times n$行列$A$をその行ごとに分割することを考える。
+ここで$trans(bold(a)_0), dots, trans(bold(a)_(n - 1))$は*行ベクトル*といい、$1 times n$行列ともとらえられる。
+
+$ A = mat(trans(bold(a)_0); dots.v; trans(bold(a)_(m - 1))) $
+
+$m times n$行列の線形変換（変形）$cal(F): RR^(m times n) --> RR^(m times n)$について考える。
+$cal(A) = {trans(bold(a)_0), dots, trans(bold(a)_(m - 1))}$とすれば、$A$は$cal(A)$に関する座標において$vec(1, dots.v, 1)$である。
+
+#definition(name: [行基本変形])[
+  次を行列における*行基本変形*として定義する。
+  / $Row(i times c)$: 第$i$行を$c$倍する。ただし、$c eq.not 0$。
+  / $Row(i <- j times c)$: 第$i$行に第$j$行の$c$倍を加える。
+  / $Row(i <-> j)$: 第$i$行と第$j$行を入れ替える。
+]
+
+これらの操作は先の例に同じく、行列を用いて表すことができる。
+次を満たす行列を実際に求めてみよ。
+
+$
+       Row(i times c)(A) & = P_(i times c) A \
+  Row(i <- j times c)(A) & = P_(i <- j times c) A \
+         Row(i <-> j)(A) & = P_(i <-> j) A
+$
