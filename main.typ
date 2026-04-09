@@ -212,7 +212,7 @@ $
 線形空間の部分空間もまた、線形空間である。
 
 #definition(name: [部分空間], ref: <partial>)[
-  $K$上の線形空間$V$の部分集合$W subset V$で、次を満たすものを$V$の*部分空間*という。
+  $K$上の線形空間$V$の空でない部分集合$W subset V$で、次を満たすものを$V$の*部分空間*という。
   + $lambda in K, bold(a) in W ==> lambda bold(a) in W$
   + $bold(a), bold(b) in W ==> bold(a) + bold(b) in W$
 ]
