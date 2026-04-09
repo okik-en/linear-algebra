@@ -3,7 +3,7 @@
 
 #let theo-init(body) = {
   // カウンタリセット
-  show heading.where(level: 1): it => {
+  show heading.where(level: 1, outlined: true): it => {
     __theo-counter__.step(level: 1)
     it
   }
