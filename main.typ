@@ -27,12 +27,89 @@
 
 = 線形空間と線形写像
 
-== 線形空間
+== 準備
+
+=== 集合
 
 はじめに、実数全体の集合を$RR$、複素数全体の集合を$CC$と表すこととしよう。
 ただし、ここでは虚数単位を$hat(j)$で表すこととする（工学系の分野では、電流$i(t)$との混同を避けるために$j$や$hat(j)$を用いることが一般的である）。
 たとえば、$pi$は$RR$の元であり、$2 hat(j) + 3$は$CC$の元である。
-一般に、$RR$の元は*スカラー*（scalar: 「大きさを変えるもの」の意）と呼ばれる。
+
+具体的な議論に入る前に、量化子を復習しておく。
+
+#definition(name: [量化子])[
+  / $forall x st f(x)$: 全称量化子。すべての$x$が$f(x)$を満たす。
+  / $exists x st f(x)$: 存在量化子。ある$x$が存在して$f(x)$を満たす。
+  / $exists! x st f(x)$: 一意存在量化子。ただ一つの$x$が存在して$f(x)$を満たす。
+]
+
+集合の演算について、以下を復習しておく。
+
+#definition(name: [集合演算])[
+  全集合$E$とその部分集合$A, B$について
+  / $A = B$: $<==> (forall x st x in A <==> x in B)$
+  / $A subset B$: $<==> (forall x st x in A ==> x in B)$
+  / $A subset.neq B$: $<==> (A eq.not B) and (A subset B)$
+  / $A union B$: $= { x in E | x in A or x in B }$
+  / $A inter B$: $= { x in E | x in A and x in B }$
+  / $A without B$: $= { x in E | x in A and x eq.not in B }$
+  / $A times B$: $= { vec(x, y) mid(|) x in A, y in B }$
+]
+
+また集合$A_0, dots, A_(n - 1)$について
+$ A_0 times dots.c times A_(n - 1) = { vec(x_0, dots.v, x_(n - 1)) mid(|) x_0 in A_0, dots, x_(n - 1) in A_(n - 1) } $
+と定め、とくに$A_0 = dots.c = A_(n - 1) = A$であるとき
+$ A^n = { vec(x_0, dots.v, x_(n - 1)) mid(|) x_0, dots, x_(n - 1) in A } $
+とかく。
+
+=== 体と演算
+
+集合$V$と$W$について、$V$のすべての元$x in V$に対して、何か法則や公式などで$x in W$が対応するとき、
+$f: V --> W$または$V -->^f W$などと書き、$f$を*$V$から$W$への写像*という。
+
+ある集合$K$について、集合$K$に関する演算を考える。
+
+#definition(name: [算法])[
+  集合$K$と別の集合$L$について
+  / 内算法: $circle.small: L times L --> L$
+  / 外算法: $diamond.small: K times L --> L$
+]
+
+内算法$circle.small$の定義域が$K times K$に一致するとき、$K$は$circle.small$について閉じているという。
+
+#definition(name: [代数系])[
+  集合$K$内に内算法$circle.small_0, dots, circle.small_(m - 1)$と外算法$diamond.small_0, dots, diamond.small_(n - 1)$が定義されているとき、
+  集合と算法の組$(K, circle.small_0, dots, circle.small_(m - 1), diamond.small_0, dots, diamond.small_(n - 1))$を*代数系*という。
+]
+
+実数$RR$や複素数$CC$、あるいは有理数$QQ$は内算法$+$と$dot$が定義された*体*である。
+
+#axiom(name: [体])[
+  代数系$(K, +, dot)$が以下の条件を満たすとき、これを*環*という。
+  - $(K, dot)$は*半群*をなす、すなわち
+    + $forall a, b in K st a b in K$
+    + $forall a, b, c in K st (a b) c = a (b c)$
+    + $exists! 1 in K, forall a in K st 1 a = a 1 = a$
+  - $(K, +)$は*可換群*である、すなわち
+    + $forall a, b in K st a + b in K$
+    + $forall a, b, c in K st (a + b) + c = a + (b + c)$
+    + $exists! 0 in K, forall a in K st a + 0 = a$
+    + $forall a in K, exists! (-a) st a + (-a) = 0$
+    + $forall a, b in K st a + b = b + a$
+  - $(K, + , dot)$は*分配法則*を満たす、すなわち
+    + $forall a, b, c in K st a (b + c) = a b + a c$
+    + $forall a, b, c in K st (a + b) c = a c + b c$
+
+  環$(K, +, dot)$のうち、乗法$dot$について可換であるものを*可換環*という。
+  $ forall a, b in K st a b = b a $
+
+  可換環$(K, +, dot)$のうち、乗法逆元が存在するものを*体*という。
+  $ forall a in K without {0}, exists! a^(-1) st a a^(-1) = a^(-1) a = 1 $
+]
+
+体の元を指して*スカラー*（scalar: 「大きさを変えるもの」の意）と呼ばれることが多い。
+
+== 線形空間
 
 我々が高校数学で学んだ$2$次元のベクトル空間$RR^2$を復習しよう。
 ここではベクトルを太字で表し（たとえば、$arrow(a)$の代わりに$bold(a)$を用いる）、基本として列ベクトルを用いる。例えば、
@@ -40,12 +117,12 @@ $
   bold(a) = vec(a_0, a_1), bold(b) = vec(b_0, b_1) in RR^2
 $
 などという具合である。
-ここで$RR^2$とは$2$次元実ベクトル全体の集合で、より一般に$n$次元実ベクトル全体の集合を$RR^n$、$n$次元複素ベクトル全体の集合を$CC^n$と表すこととする。
+ここで$RR^2$とは$2$次元実ベクトル全体の集合で、より一般に$n$次元実ベクトル全体の集合を$RR^n$、$n$次元複素ベクトル全体の集合を$CC^n$と表す。
 
 $
-  RR^n eq.delta { vec(x_0, dots.v, x_(n - 1)) mid(|) x_i in RR },
+  RR^n = { vec(x_0, dots.v, x_(n - 1)) mid(|) x_i in RR },
   wide
-  CC^n eq.delta { vec(z_0, dots.v, z_(n - 1)) mid(|) z_i in CC }
+  CC^n = { vec(z_0, dots.v, z_(n - 1)) mid(|) z_i in CC }
 $
 
 話を戻すと、$RR^2$には*スカラー倍*（定数倍ともいう）と*和*が定義されていた。
@@ -67,25 +144,24 @@ $
 
 集合$RR^n$も$RR^2$と同様に、スカラー倍と和について閉じている。
 
-このように（大雑把に）スカラー倍と和について閉じた集合を*$RR$上の線形空間*という。
+このように（大雑把に）スカラー倍と和について閉じた集合を*線形空間*という。
 
-#axiom(name: [$RR$上の線形空間])[
-  集合$V$において*スカラー倍*と*和*が定義されていて、かつ以下の条件を満たすとき、$V$を*$RR$上の線形空間*という。
-  - 任意のスカラー$lambda in RR$と集合の元$bold(x) in V$に対して、$V$内にスカラー倍$lambda bold(x) in V$が定まり、次を満たす。
-    + $forall lambda, mu in RR; forall bold(x) in V st (lambda mu) bold(x) = lambda (mu bold(x))$
-    + $forall lambda in RR; forall bold(x), bold(y) in V st lambda(bold(x) + bold(y)) = lambda bold(x) + lambda bold(y)$
-    + $forall lambda, mu in RR; forall bold(x) in V st (lambda + mu) bold(x) = lambda bold(x) + mu bold(x)$
+#axiom(name: [$K$上の線形空間])[
+  集合$V$と体$K$が以下の条件を満たすとき、$V$を*$K$上の線形空間*という。
+  - 任意のスカラー$lambda in K$と集合の元$bold(x) in V$に対して、積$dot: K times V --> V$が定義され、$V$内にスカラー倍$lambda dot bold(x) in V$が定まり、次を満たす。
+    + $forall lambda, mu in K; forall bold(x) in V st (lambda mu) bold(x) = lambda (mu bold(x))$
     + $forall bold(x) in V st 1 bold(x) = bold(x)$
-  - 集合の元$bold(x), bold(y) in V$に対して、$V$内に和$bold(x) + bold(y) in V$が定まり、次を満たす。
+  - 元$bold(x), bold(y) in V$に対して、和$+: V times V --> V$が定義され、$V$内に和$bold(x) + bold(y) in V$が定まり、次を満たす。
     + $forall bold(x), bold(y), bold(z) in V st (bold(x) + bold(y)) + bold(z) = bold(x) + (bold(y) + bold(z))$
     + $forall bold(x), bold(y) in V st bold(x) + bold(y) = bold(y) + bold(x)$
-    + $exists! bold(0) in V, forall bold(x) in V st bold(x) + bold(0) = bold(x)$
+    + $exists! bold(0) in V, forall bold(x) in V st bold(x) + bold(0) = bold(x)$ #h(2em) （*零元*の存在）
     + $forall bold(x) in V, exists! (-bold(x)) st bold(x) + (-bold(x)) = bold(0)$
+  - 和と積が次を満たす。
+    + $forall lambda in K; forall bold(x), bold(y) in V st lambda(bold(x) + bold(y)) = lambda bold(x) + lambda bold(y)$
+    + $forall lambda, mu in K; forall bold(x) in V st (lambda + mu) bold(x) = lambda bold(x) + mu bold(x)$
 ]
 
-さて、随分仰々しく書いたものだが、$forall x$は「すべての$x$について」、$exists x$は「ある$x$が存在して」、$exists! x$は「ただ一つの$x$が存在して」を意味する。また、$"s.t."$は「such that」の略である。
-
-$RR$上の線形空間はなにも$RR^n$に留まらない。例えば漸化式
+線形空間はなにも$RR^n$に留まらない。例えば漸化式
 #eqref(<zenkasiki>)[$
   a_(n + 3) = 4 a_(n + 2) - a_(n + 1) - a_n
 $]
@@ -136,8 +212,8 @@ $
 線形空間の部分空間もまた、線形空間である。
 
 #definition(name: [部分空間], ref: <partial>)[
-  線形空間$V$の部分集合$W subset V$であって、次を満たすものを$V$の*部分空間*という。
-  + $lambda in RR, bold(a) in W ==> lambda bold(a) in W$
+  $K$上の線形空間$V$の部分集合$W subset V$で、次を満たすものを$V$の*部分空間*という。
+  + $lambda in K, bold(a) in W ==> lambda bold(a) in W$
   + $bold(a), bold(b) in W ==> bold(a) + bold(b) in W$
 ]
 
@@ -157,7 +233,7 @@ $
 ]
 
 #proof[
-  $bold(x), bold(y) in V inter W$のとき、$V$と$W$がともに線形空間であることから、任意の$lambda in RR$について$lambda bold(x) in V$かつ$lambda bold(x) in W$であり、$lambda bold(x) in V inter W$。
+  $bold(x), bold(y) in V inter W$のとき、$V$と$W$がともに線形空間であることから、任意の$lambda in K$について$lambda bold(x) in V$かつ$lambda bold(x) in W$であり、$lambda bold(x) in V inter W$。
   また、$bold(x) + bold(y) in V$かつ$bold(x) + bold(y) in W$であり、$bold(x) + bold(y) in V inter W$。
   ゆえに、$V inter W$は線形空間である。
 
@@ -188,7 +264,8 @@ $
 と他のベクトルの一次結合で表すことができる。このとき、$cal(A)$は*一次従属*であるという。
 
 #definition(name: [一次独立])[
-  線形空間$W$で$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)} subset W$をとる。実数$lambda_0, dots, lambda_(n - 1)$について
+  線形空間$W$で$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)} subset W$をとる。
+  体$K$の元$lambda_0, dots, lambda_(n - 1)$について
   $ sum_(i = 0)^(n - 1) lambda_i bold(a)_i = bold(0) ==> lambda_0 = dots.c = lambda_(n - 1) = 0 $
   がいえるとき、$cal(A)$は*一次独立*であるといい、さもなければ*一次従属*であるという。
 ]
@@ -212,13 +289,13 @@ $ sum_(i = 0, i eq.not k)^(n - 1) lambda_i bold(a)_i - bold(a)_k = bold(0) $
 これらの事実およびその対偶から、次のことが言える。
 
 #theorem(ref: <dokuritsusei>)[
-  $RR$上の線形空間$W$とその元集合$cal(A)$について
+  線形空間$W$とその元集合$cal(A)$について
   + $cal(A)$は一次独立 $<==>$ $cal(A)$中の任意の元は他の元の一次結合で表せない
   + $cal(A)$は一次従属 $<==>$ $cal(A)$中の任意の元は他の元の一次結合で表せる
 ]
 
-線形空間$V$の元$bold(a)_0, dots, bold(a)_(n - 1)$について
-$ W = {sum_(i = 0)^(n - 1) lambda_i bold(a)_i mid(|) lambda_i in RR} $
+$K$上の線形空間$V$の元$bold(a)_0, dots, bold(a)_(n - 1)$について
+$ W = {sum_(i = 0)^(n - 1) lambda_i bold(a)_i mid(|) lambda_i in K} $
 を考えると、$bold(x), bold(y) in W$について$lambda bold(x) in W$で、かつ$bold(x) + bold(y) in W$が成り立つため、$W$は$V$の部分空間である。
 特に$W$を*$bold(a)_0, dots, bold(a)_(n - 1)$が張る（生成する）部分空間*といい、$lr(chevron.l bold(a)_0, dots, bold(a)_(n - 1) chevron.r)$とかく。
 また、$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)}$を$W$の*生成系*という。
@@ -315,7 +392,7 @@ $bold(a)$は$cal(A)$の一次結合として書けないことから、$dim V + 
 #definition(name: [座標])[
   零元のみでない線形空間$V$の基底$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)}$について、任意の元$bold(x) in V$が
   $ bold(x) = sum_(i = 0)^(n - 1) lambda_i bold(a)_i $
-  と表せるとき、このような$bold(lambda) = vec(lambda_0, dots.v, lambda_(n - 1))$を*基底$cal(A)$に関する$bold(x)$の座標*という。
+  と表せるとき、このような$bold(lambda) = vec(lambda_0, dots.v, lambda_(n - 1)) in K^n$を*基底$cal(A)$に関する$bold(x)$の座標*という。
 ]
 
 線形空間$W$の基底$cal(A) = {bold(a)_0, dots, bold(a)_(n - 1)}$に関する座標を考える。
@@ -343,8 +420,6 @@ $ vec(5, 8) = p vec(3, 2) + q vec(-1, 4) $
 これ以降、特に断りがなければ、線形空間の元をその基底に関する座標で表すこととする。これにより、一般の線形空間を考えることなく、その元を$RR^n$のベクトルとして一元的に扱うことができるようになる。
 
 == 線形写像
-
-$bold(x) in RR^n$に対して、何か法則や公式などで$f(bold(x)) in RR^m$が対応するとき、$f: RR^n --> RR^m$または$RR^n -->^f RR^m$などと書き、$f$を*$RR^n$から$RR^m$への写像*という。
 
 $RR$から$RR$への写像$f$を考えよう。これについて、以下の二条件は同値だろうか。
 $
@@ -402,10 +477,10 @@ $
 // #pagebreak()
 
 #definition(name: "線形写像")[
-  線形空間$V$から線形空間$W$への写像$f: V --> W$が*線形写像*であるとは、写像$f$が
-  / 斉次性: $forall lambda in RR, forall bold(x) in V st f(lambda bold(x)) = lambda f(bold(x))$
+  $K$上の線形空間$V$から線形空間$W$への写像$f: V --> W$が*線形写像*であるとは、
+  / 斉次性: $forall lambda in K, forall bold(x) in V st f(lambda bold(x)) = lambda f(bold(x))$
   / 加法性: $forall bold(x), bold(y) in V st f(bold(x) + bold(y)) = f(bold(x)) + f(bold(y))$
-  をともに満たすことをいう。両者を合わせて*線形性*という。
+  を写像$f$がともに満たすことをいう。両者を合わせて*線形性*という。
 ]
 
 線形写像は、正比例の一般化ともいえる。
