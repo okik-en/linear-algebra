@@ -666,9 +666,9 @@ $
 
 === 積
 
-いま、$m times n$実行列$A$の定める線形写像$f$と$l times m$実行列$B$の定める線形写像$g$があって
-$ RR^n -->^f RR^m -->^g RR^l $
-を満たすとする。このとき合成写像$g compose f$は$bold(x), bold(y) in RR^n$および$lambda in RR$について
+いま、$m times n$行列$A$の定める線形写像$f$と$l times m$行列$B$の定める線形写像$g$があって
+$ K^n -->^f K^m -->^g K^l $
+を満たすとする。このとき合成写像$g compose f$は$bold(x), bold(y) in K^n$および$lambda in K$について
 $
   (g compose f)(lambda bold(x)) &= g(f(lambda bold(x))) = g(lambda f(bold(x))) = lambda g(f(bold(x))) = lambda (g compose f)(bold(x)) \
   (g compose f)(bold(x) + bold(y)) &= g(f(bold(x) + bold(y))) = g(f(bold(x)) + f(bold(y))) \
@@ -703,11 +703,11 @@ $ (B A) bold(x) = B (A bold(x)) $
 一般に、行列の積は*非可換*である（すなわち、$A B = B A$とは限らない）。
 
 #theorem(name: [合成写像と積行列])[
-  $m times n$実行列$A$と$l times m$実行列$B$の定める線形写像$f$と$g$について、その合成写像$g compose f$は線形写像であり、*積$B A$*は$g compose f$を定める。
+  $m times n$行列$A$と$l times m$行列$B$の定める線形写像$f$と$g$について、それらの合成写像$g compose f$は線形写像であり、*積$B A$*は$g compose f$を定める。
 ]
 
 #theorem(name: [行列の積])[
-  $l times underline(m)$実行列$B = mat(display(b_(i, j)))_(i, j)$と$underline(m) times n$実行列$A = mat(display(a_(i, j)))_(i, j)$について積$B A$が定まり、
+  $l times underline(m)$行列$B = mat(display(b_(i, j)))_(i, j)$と$underline(m) times n$行列$A = mat(display(a_(i, j)))_(i, j)$について積$B A$が定まり、
   $
     B A = mat(display(B vec(a_(0, 0), dots.v, a_(0, m - 1))), dots.c, display(B vec(a_(n - 1, 0), dots.v, a_(n - 1, m - 1)))) = mat(display(sum_(k = 0)^(m - 1) b_(i, k) a_(k, j)))_(i, j)
   $
@@ -716,7 +716,7 @@ $ (B A) bold(x) = B (A bold(x)) $
 
 あるいは逆向きに考えることもできる。$n$次元列ベクトルを$n times 1$行列と見做してその責を計算しても、まったく不合理でないのだ。
 
-#corollary[
+#corollary(ref: <mat-mul>)[
   + $forall A in K^(l times m), forall B in K^(m times n) st A B in K^(l times n)$
   + $forall A in K^(k times l), forall B in K^(l times m), forall C in K^(m times n) st (A B) C = A (B C)$
   + $exists!I_m in K^(m times m), forall A in K^(m times n) st A I_m = I_m A = A$
@@ -726,7 +726,7 @@ $ (B A) bold(x) = B (A bold(x)) $
 
 === 逆行列
 
-いま、$n$次正方行列$A$とこれの定める$RR^n$上の線形変換$f: RR^n --> RR^n$があって、これが$RR^n$上の*逆変換*$f^(-1): RR^n --> RR^n$を持つとする。
+いま、$n$次正方行列$A$とこれの定める$K^n$上の線形変換$f: K^n --> K^n$があって、これが$K^n$上の*逆変換*$f^(-1): K^n --> K^n$を持つとする。
 このとき逆変換$f^(-1)$は
 $
   f^(-1)(lambda bold(x)) = lambda f^(-1)(bold(x)),
@@ -734,11 +734,11 @@ $
   f^(-1)(bold(x) + bold(y)) = f^(-1)(bold(x)) + f^(-1)(bold(y))
 $
 を満たすから、$f^(-1)$もまた線形写像である。このとき
-$ RR^n -->^f RR^n -->^(f^(-1)) RR^n $
-を考えると、$f^(-1)$に対応する行列$B$は、任意の$bold(x) in RR^n$について次のように表せる。
+$ K^n -->^f K^n -->^(f^(-1)) K^n $
+を考えると、$f^(-1)$に対応する行列$B$は、任意の$bold(x) in K^n$について次のように表せる。
 #eqref(<BAxisx>)[$ B A bold(x) = bold(x) $]
 
-さて、突然だが恒等変換$id^n: RR^n --> RR^n, id^n (bold(x)) = bold(x)$を考える。これを定める$n times n$行列$I_n$（単に$I$とも書く）は*単位行列*と呼ばれ、$RR^n$の標準基底${bold(e)_0, dots.c, bold(e)_(n - 1)}$を用いて
+ここで#theo-ref(<mat-mul>)を満たす行列$I_n$（$I$とも書く）は*単位行列*と呼ばれ、$K^n$の標準基底${bold(e)_0, dots.c, bold(e)_(n - 1)}$を用いて
 $
   I_n = mat(bold(e)_0, dots.c, bold(e)_(n - 1)) = mat(1, , bold(0); , dots.down, ; bold(0), , 1)
 $
@@ -762,18 +762,24 @@ $ delta_(i, j) = cases(1 quad "if" i = j, 0 quad "othewise") $
 
 === スカラー倍
 
-$m times n$実行列$A$が定める線形写像$f: RR^n --> RR^m$、$m$次正方実行列$Lambda_m = mat(display(lambda delta_(i, j)))_(i, j)$の定める線形写像$lambda_m: RR^m --> RR^m, f(bold(x)) = lambda bold(x)$について、合成写像$lambda_m compose f$もまた線形写像であるから、これを定める$m times n$実行列を$L_1 = Lambda_m A$とおくと、
+$m times n$行列$A$が定める線形写像$f: K^n --> K^m$、
+$m$次正方行列$Lambda_m = mat(display(lambda delta_(i, j)))_(i, j)$の定める線形写像$lambda_m: K^m --> K^m, f(bold(x)) = lambda bold(x)$について、
+合成写像$lambda_m compose f$も線形写像であるから、
+これを定める$m times n$行列を$L_1 = Lambda_m A$とおくと、
 $
   c_(i, j) = sum_(k = 0)^(m - 1) (lambda delta_(i, k)) a_(k, j) = lambda a_(i, j)
 $
-である。また、$n$次正方実行列$Lambda_n = mat(display(lambda delta_(i, j)))_(i, j)$の定める線形写像$lambda_n: RR^n --> RR^n, lambda_n(bold(x)) = lambda bold(x)$について、合成写像$f compose lambda_n$もまた線形写像であるから、これを定める$m times n$実行列を$L_2 = A Lambda_n$とおくと、
+である。
+また、$n$次正方行列$Lambda_n = mat(display(lambda delta_(i, j)))_(i, j)$の定める線形写像$lambda_n: K^n --> K^n, lambda_n (bold(x)) = lambda bold(x)$について、
+合成写像$f compose lambda_n$もまた線形写像であるから、
+これを定める$m times n$行列を$L_2 = A Lambda_n$とおくと、
 $
   c_(i, j) = sum_(k = 0)^(n - 1) a_(i, k) (lambda delta_(k, j)) = lambda a_(i, j)
 $
 となる。つまり、$Lambda_m A = A Lambda_n = mat(display(lambda a_(i, j)))_(i, j)$であり、これを単に$lambda A = A lambda$と書くこととする。
 
 #theorem[
-  $m times n$実行列$A$と$lambda in RR$について、*スカラー倍*$lambda A$は次のように書ける。
+  $m times n$行列$A$と$lambda in K$について、*スカラー倍*$lambda A$は次のように書ける。
   $ lambda A = mat(display(lambda a_(i, j)))_(i, j) $
 ]
 
@@ -811,7 +817,7 @@ $m times n$行列$A$をその行ごとに分割することを考える。
 
 $ A = mat(trans(bold(a)_0); dots.v; trans(bold(a)_(m - 1))) $
 
-$m times n$行列の線形変換（変形）$cal(F): RR^(m times n) --> RR^(m times n)$について考える。
+$m times n$行列の線形変換（変形）$cal(F): K^(m times n) --> K^(m times n)$について考える。
 $cal(A) = {trans(bold(a)_0), dots, trans(bold(a)_(m - 1))}$とすれば、$A$は$cal(A)$に関する座標において$vec(1, dots.v, 1)$である。
 
 #definition(name: [行基本変形])[
